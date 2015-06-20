@@ -2,8 +2,8 @@ ABOUT CONVEYOR STRATEGY
 =======================
 Just a short note here explaining why this fork of Armangil's podcatcher exists.
 
-I'm setting up Ubuntu HTPC to automatically download podcast episodes from multiple feeds
-when I plug in my MP3 player.
+I'm setting up Ubuntu HTPC to automatically download podcast episodes from
+multiple feeds when I plug in my MP3 player.
 
 I have decided that the best strategy for me is as follows:
 
@@ -12,7 +12,7 @@ I have decided that the best strategy for me is as follows:
     I manually deleted (ie. after I listened them.)
   * It should prefer new episodes over older ones.
 
-This can now be achieved by combining --strategy conveyor with --files N options.
+This can now be achieved by combining parameters --strategy conveyor and --files N.
 
 Example:
 
