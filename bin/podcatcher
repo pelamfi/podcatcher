@@ -2129,6 +2129,7 @@ private
 			rescue SystemExit
 				exit 1
 			rescue Exception
+				puts $!, $@
 			end
 			$stderr.puts "Attempt #{i} aborted" if @opt.verbose
 			doc = ""
