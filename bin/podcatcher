@@ -1367,7 +1367,7 @@ class Cache
 		content.redirection_url = nil
 		done = false
 		for redirect_count in 0...10
-			Net::HTTP.start(download_url.host, download_url.port, :use_ssl => download_url.scheme == 'https', :verify_mode => OpenSSL::SSL::VERIFY_NONE) do |http|
+			Net::HTTP.start(download_url.host, download_url.port, :use_ssl => download_url.scheme == 'https') do |http|
 				request = Net::HTTP::Get.new download_url
 				request['User-Agent'] = USER_AGENT
 				request['Referer'] = content.feedurl if content.feedurl and (content.feedurl =~ %r{^http:} or content.feedurl =~ %r{^ftp:})
