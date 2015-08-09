@@ -131,6 +131,7 @@ opt.strategy = opt.STRATEGIES[0]
 opt.retries = 1
 opt.torrent_dir = nil
 opt.rubytorrent = false
+opt.id3 = false
 opt.upload_rate = nil #10
 opt.itemsize = 0
 opt.feeds = 1_000
@@ -1400,6 +1401,23 @@ class Cache
 		rescue
 			content.file.unlink unless content.file.nil? # don't leave possible half downloaded file lying around
 		end
+		if @opt.id3 and File.extname(content.file).downcase == ".mp3"
+			$stderr.puts "Checking MP3 file ID3 tags" if @opt.verbose
+			tag = ID3Lib::Tag.new(content.file)
+			modified = false
+			if (tag.title.empty? or tag.title.downcase == "unknown") and content.feed_title and content.feed_title.size > 0
+				tag.title = content.feed_title
+				modified = true
+			end
+			if (tag.album.empty? or tag.album.downcase == "unknown") and content.title and content.title.size > 0
+				tag.album = content.title
+				modified = true
+			end
+			if modified
+				$stderr.puts "Fixing MP3 file ID3 tags" if @opt.verbose
+				tag.update!
+			end
+		end
 	end
 	def createplaylist(urls)
 		playlist = Playlist.new @opt.playlist_type
@@ -2580,6 +2598,16 @@ begin
 	require "rubytorrent"
 	opt.rubytorrent = true
 	$stderr.puts "RubyTorrent detected." if opt.verbose
+rescue Interrupt, SystemExit
+	exit 1
+rescue Exception
+end
+
+begin
+    # todo: document: install with on ubuntu: sudo apt-get install libid3-tools;sudo gem install id3lib-ruby
+	require 'id3lib'
+	opt.id3 = true
+	$stderr.puts "id3lib detected." if opt.verbose
 rescue Interrupt, SystemExit
 	exit 1
 rescue Exception
