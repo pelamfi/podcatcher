@@ -1403,14 +1403,14 @@ class Cache
 		end
 		if @opt.id3 and File.extname(content.file).downcase == ".mp3"
 			$stderr.puts "Checking MP3 file ID3 tags" if @opt.verbose
-			tag = ID3Lib::Tag.new(content.file)
+			tag = ID3Lib::Tag.new(content.file.to_path)
 			modified = false
-			if (tag.title.empty? or tag.title.downcase == "unknown") and content.feed_title and content.feed_title.size > 0
-				tag.title = content.feed_title
+			if (!tag.album or tag.album.downcase == "unknown") and content.feed_title and content.feed_title.size > 0
+				tag.album = content.feed_title
 				modified = true
 			end
-			if (tag.album.empty? or tag.album.downcase == "unknown") and content.title and content.title.size > 0
-				tag.album = content.title
+			if (!tag.title or tag.title.downcase == "unknown") and content.title and content.title.size > 0
+				tag.title = content.title
 				modified = true
 			end
 			if modified
